@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-200 min-h-screen p-4">
+    <div id="tasks" class="flex flex-wrap"></div>
+    <button
+      id="send"
+      class="bg-blue-600 text-white px-4 py-2 rounded-xl mt-5 shadow-md"
+    >
+      Send all active tasks
+    </button>
+
+    <script>
+      const sendBtn = document.getElementById("send");
+
+      sendBtn.onclick = () => {
+        fetch("http://localhost:3000/api/v1/send", {
+          method: "POST",
+        }).then(() => {
+          window.location.reload();
+        });
+      };
+    </script>
+
+    <script>
+      const tasksContainer = document.getElementById("tasks");
+
+      fetch("http://localhost:3000/api/v1/tasks", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((tasks) => {
+          let markup = "";
+
+          for (const task of tasks) {
+            const checked = task.activated ? "checked" : "";
+            markup += `
+            <div class="w-64 p-7 rounded-xl bg-gray-100 shadow-lg flex flex-col mb-4 mr-4">
+              <h1 class="text-2xl font-black">${task.title}</h1>
+              <p class="my-4">${task.description}</p>
+              <label id="${task._id}" class="change-status mt-auto">
+                <input type="checkbox"  ${checked}/> Active
+              </label>
+            </div>`;
+          }
+
+          tasksContainer.innerHTML = markup;
+          const labels = Array.from(
+            document.getElementsByClassName("change-status")
+          );
+          for (const label of labels) {
+            label.onclick = () => {
+              const id = label.id;
+              fetch(`http://localhost:3000/api/v1/tasks/${id}`, {
+                method: "PATCH",
+              }).then(() => {
+                window.location.reload();
+              });
+            };
+          }
+        });
+    </script>
+  </body>
+</html>
