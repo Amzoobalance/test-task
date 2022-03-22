@@ -6,10 +6,10 @@
 3. Make sure you have Redis installed and running locally
 
 4. Create .env file and assign values for the following variables
-  API_SERVICE_PORT=3000
-  RENDERER_SERVICE_PORT=4000
-  MONGO_DB_URL=your MongoDB connection URL
-  SENDINBLUE_API_KEY=your Sendinblue API V3 Key
+  - API_SERVICE_PORT=3000
+  - RENDERER_SERVICE_PORT=4000
+  - MONGO_DB_URL=your MongoDB connection URL
+  - SENDINBLUE_API_KEY=your Sendinblue API V3 Key
 
 5. Run node src/seed to add data to MongoDB
 
